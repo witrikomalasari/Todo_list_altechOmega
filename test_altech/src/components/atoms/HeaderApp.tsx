@@ -1,67 +1,53 @@
+import {ArrowLeft} from '@assets/iconSVG';
+import {AltechText} from '@components/molecules';
+import {AltechColors} from '@theme/colorsAltech';
+import {type} from '@theme/fontAltech';
 import React, {FC} from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
-import Spacer from './Spacer';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 
 interface IHeaderAppProps {
-  HeaderName: string;
-  RightIcon?: boolean;
-  RightIconMap?: boolean;
+  headerName: string;
 }
 
-export const HeaderApp: FC<IHeaderAppProps> = ({
-  HeaderName = 'HeaderApp',
-  RightIcon = false,
-  RightIconMap = false,
-}) => {
+export const HeaderApp: FC<IHeaderAppProps> = ({headerName}) => {
   return (
-    <View
-      style={{
-        borderBottomColor: '#EFEFED',
-        borderBottomWidth: 1,
-        paddingHorizontal: 16,
-        backgroundColor: 'white',
-        paddingBottom: 16,
-      }}>
-      <Spacer height={18} />
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'center',
-        }}>
-        <TouchableOpacity
+    <View style={styles.container}>
+      <TouchableOpacity
+      // onPress={() => {navigation.popToTop();}}
+      // style={{backgroundColor: 'red'}}
+      >
+        <ArrowLeft color={AltechColors.text.black} />
+      </TouchableOpacity>
+      <View style={{flex: 1, backgroundColor: 'pink'}}>
+        <AltechText
+          textType="bold"
+          fontSize={16}
+          fontColors={AltechColors.text.primary}
           style={{
-            // backgroundColor: 'red',
-            position: 'absolute',
-            left: 0,
+            fontFamily: type.openSansSemiBold,
+            letterSpacing: 2,
+            textAlign: 'center',
+            paddingRight: 32,
           }}>
-          {/* <ArrowLeft width={24} height={24} color={'black'} /> */}
-        </TouchableOpacity>
-        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-          <Text
-            style={{
-              color: 'black',
-              fontWeight: '800',
-            }}>
-            {HeaderName}
-          </Text>
-        </View>
-        {RightIcon && (
-          <View>
-            <TouchableOpacity>
-              {/* <Heart width={24} height={24} color={'black'} /> */}
-            </TouchableOpacity>
-          </View>
-        )}
-        {RightIconMap && (
-          <View style={{backgroundColor: 'red', borderWidth: 1}}>
-            <TouchableOpacity>
-              {/* <GPS width={24} height={24} color={'black'} /> */}
-            </TouchableOpacity>
-          </View>
-        )}
+          {headerName}
+        </AltechText>
       </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    backgroundColor: AltechColors.white,
+    borderBottomWidth: 1,
+    borderBottomColor: AltechColors.gray,
+    justifyContent: 'space-between',
+    paddingVertical: 16,
+    alignItems: 'center',
+    // paddingLeft: 16,
+    paddingHorizontal: 16,
+  },
+});
 
 export default HeaderApp;
