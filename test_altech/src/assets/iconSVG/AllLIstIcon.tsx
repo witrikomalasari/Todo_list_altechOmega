@@ -3,7 +3,7 @@ import React, {FC} from 'react';
 import {Path, Svg} from 'react-native-svg';
 import {IconsProps} from './typeInterface';
 
-const AllLIstIcon: FC<IconsProps> = ({width, height, color}) => {
+export const AllLIstIcon: FC<IconsProps> = ({width, height, color}) => {
   return (
     <SvgWrapper
       width={width}

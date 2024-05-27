@@ -3,3 +3,4 @@ export * from './Completed';
 export * from './DeleteIcon';
 export * from './EditIcon';
 export * from './checkIcon';
+export * from './ArrowLeft';

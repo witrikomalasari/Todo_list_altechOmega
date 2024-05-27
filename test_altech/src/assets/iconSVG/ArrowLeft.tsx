@@ -1,19 +1,19 @@
+import React from 'react';
 import {SvgWrapper} from '@components/atoms';
-import React, {FC} from 'react';
 import {Path, Svg} from 'react-native-svg';
 import {IconsProps} from './typeInterface';
 
-export const CompletedIcon: FC<IconsProps> = ({width, height, color}) => {
+export const ArrowLeft = ({width = 24, height = 24, color}: IconsProps) => {
   return (
     <SvgWrapper
       width={width}
       height={height}
-      aspectRatio={30 / 30}
+      aspectRatio={24 / 24}
       children={
-        <Svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+        <Svg width="24" height="24" viewBox="0 0 24 24" fill="none">
           <Path
-            d="M6.25 15.625L12.0838 21.25L23.75 10"
-            stroke={color} //"#8B8787"
+            d="M15.5 19L8.5 12L15.5 5"
+            stroke={color} //"#2F2D2C"
             stroke-width="1.5"
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -24,4 +24,4 @@ export const CompletedIcon: FC<IconsProps> = ({width, height, color}) => {
   );
 };
 
-export default CompletedIcon;
+export default ArrowLeft;
