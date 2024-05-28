@@ -18,11 +18,11 @@ export const HeaderApp: FC<IHeaderAppProps> = ({headerName}) => {
       >
         <ArrowLeft color={AltechColors.text.black} />
       </TouchableOpacity>
-      <View style={{flex: 1, backgroundColor: 'pink'}}>
+      <View style={{flex: 1}}>
         <AltechText
           textType="bold"
           fontSize={16}
-          fontColors={AltechColors.text.primary}
+          fontColors={AltechColors.text.white}
           style={{
             fontFamily: type.openSansSemiBold,
             letterSpacing: 2,
@@ -39,13 +39,10 @@ export const HeaderApp: FC<IHeaderAppProps> = ({headerName}) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    backgroundColor: AltechColors.white,
-    borderBottomWidth: 1,
-    borderBottomColor: AltechColors.gray,
+    backgroundColor: AltechColors.primary,
     justifyContent: 'space-between',
     paddingVertical: 16,
     alignItems: 'center',
-    // paddingLeft: 16,
     paddingHorizontal: 16,
   },
 });

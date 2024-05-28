@@ -3,7 +3,7 @@ import React, {FC} from 'react';
 import {Path, Svg} from 'react-native-svg';
 import {IconsProps} from './typeInterface';
 
-export const checkIcon: FC<IconsProps> = ({width, height, color}) => {
+export const CheckIcon: FC<IconsProps> = ({width = 25, height = 25, color}) => {
   return (
     <SvgWrapper
       width={width}
@@ -33,4 +33,4 @@ export const checkIcon: FC<IconsProps> = ({width, height, color}) => {
   );
 };
 
-export default checkIcon;
+export default CheckIcon;

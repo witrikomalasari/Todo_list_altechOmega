@@ -1,0 +1,24 @@
+{
+  "category": [
+    {
+      "id": 1,
+      "name": "working"
+    },
+    {
+      "id": 2,
+      "name": "personal"
+    },
+    {
+      "id": 3,
+      "name": "shopping"
+    },
+    {
+      "id": 4,
+      "name": "wishlist"
+    },
+    {
+      "id": 5,
+      "name": "belajar"
+    }
+  ]
+}

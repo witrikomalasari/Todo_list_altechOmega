@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {SvgWrapper} from '@components/atoms';
 import {Path, Svg} from 'react-native-svg';
 import {IconsProps} from './typeInterface';
 
-export const ArrowLeft = ({width = 24, height = 24, color}: IconsProps) => {
+export const ArrowLeft: FC<IconsProps> = ({width = 24, height = 24, color}) => {
   return (
     <SvgWrapper
       width={width}

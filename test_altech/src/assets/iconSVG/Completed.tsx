@@ -3,7 +3,11 @@ import React, {FC} from 'react';
 import {Path, Svg} from 'react-native-svg';
 import {IconsProps} from './typeInterface';
 
-export const CompletedIcon: FC<IconsProps> = ({width, height, color}) => {
+export const CompletedIcon: FC<IconsProps> = ({
+  width = 30,
+  height = 30,
+  color,
+}) => {
   return (
     <SvgWrapper
       width={width}

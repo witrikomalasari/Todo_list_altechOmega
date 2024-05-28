@@ -36,10 +36,14 @@ export const AltechColors = {
   primary: mainColors.red1,
   secondary: mainColors.dark1,
 
+  lightGray: mainColors.grey5,
+  middleGray: mainColors.grey7,
+
   white: mainColors.white,
   black: mainColors.dark2,
   blue: mainColors.blue5,
   gray: mainColors.grey1,
+  shadow: mainColors.black2,
 
   disable: mainColors.grey5,
   cardLight: mainColors.green2,
