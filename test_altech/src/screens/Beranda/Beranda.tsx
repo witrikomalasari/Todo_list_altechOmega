@@ -4,44 +4,69 @@ import {HeaderApp, Spacer} from '@components/atoms';
 import CardTask from '@components/molecules/CardTask';
 import {Icon} from '@rneui/themed';
 import {AltechColors} from '@theme/colorsAltech';
-import React, {FC, useEffect, useState} from 'react';
-import {FlatList, StyleSheet, TextInput, View} from 'react-native';
+import React, {FC, useRef, useState} from 'react';
+import {
+  FlatList,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 interface IBeranda {}
 
-// const {height, width} = Dimensions.get('window');
-
 export interface DataTask {
   id: number;
-  task: string;
+  taskName: string;
+  date: string;
+  category: string;
+  completed: boolean;
 }
 
 const Beranda: FC<IBeranda> = () => {
   const [searchInput, setSearchInput] = useState<string>('');
+  const [listTodo, setListTodo] = useState<DataTask[]>([]);
+  const textInputRef = useRef<TextInput>(null);
 
-  useEffect(() => {
-    // console.log('pas', searchInput);
-  }, [searchInput]);
+  const handleFilter = (UserTextInput: string) => {
+    if (!UserTextInput) {
+      setListTodo(JSONListTask.data);
+    }
+    let filterlist = JSONListTask.data.filter(item =>
+      item.taskName.toLowerCase().includes(UserTextInput.toLowerCase()),
+    );
+    setListTodo(filterlist);
+  };
 
-  const {data} = JSONListTask;
+  const handleClearInput = () => {
+    // setSearchInput('');
+    // if (textInputRef.current) {
+    //   textInputRef.current.clear();
+    // }
+  };
+
+  // console.log('ffff', listTodo);
+
+  // const handleDeleteByID = () => {
+  // let deleteItem = JSONListTask.data.filter(item => item.id !== id);
+  // setListTodo(prevData => prevData.filter(item => item.id !== id));
+  // };
 
   const handleRenderItem = ({item}) => {
-    // console.log('itemTask', item);
-    console.log('item', item);
+    // console.log('fd', item);
     return (
       <CardTask
         taskName={item.taskName}
         category={item.category}
         date={item.date}
-        status={item.status}
+        status={item.completed}
         // onEdit={()=>{}}
-        // onDelete={()=>{}}
+        // onDelete={() => handleDeleteByID(item.id)}
         // onCompleted={()=>{}}
       />
     );
   };
 
-  // console.log('json', data);
   return (
     <View style={styles.container}>
       <HeaderApp headerName="Todo App" />
@@ -51,9 +76,13 @@ const Beranda: FC<IBeranda> = () => {
           <View style={styles.searchBar}>
             <View style={styles.wrappTextInput}>
               <TextInput
+                ref={textInputRef}
                 style={styles.textInput}
                 value={searchInput}
-                onChangeText={text => setSearchInput(text)}
+                onChangeText={text => {
+                  setSearchInput(text);
+                  handleFilter(text);
+                }}
                 placeholder="Search Task here..."
                 placeholderTextColor={AltechColors.white}
                 keyboardType="ascii-capable"
@@ -61,16 +90,18 @@ const Beranda: FC<IBeranda> = () => {
               <View style={styles.wrappSearchIcon}>
                 <SearchIcon color={AltechColors.white} />
               </View>
-              <View style={styles.wrappDeleteIcon}>
+              <TouchableOpacity
+                style={styles.wrappDeleteIcon}
+                onPress={() => handleClearInput()}>
                 <Icon name="clear" type="material" color={AltechColors.white} />
-              </View>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
         <Spacer height={10} />
-        <View style={{paddingHorizontal: 16}}>
+        <View style={styles.listContainer}>
           <FlatList
-            data={data}
+            data={listTodo}
             keyExtractor={item => item.id.toString()}
             renderItem={handleRenderItem}
           />
@@ -90,7 +121,6 @@ const styles = StyleSheet.create({
     backgroundColor: AltechColors.white,
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
-    // paddingHorizontal: 16,
   },
   section: {
     backgroundColor: AltechColors.primary,
@@ -128,6 +158,7 @@ const styles = StyleSheet.create({
     // backgroundColor: 'red',
   },
   wrappDeleteIcon: {position: 'absolute', right: 13},
+  listContainer: {paddingHorizontal: 10},
 });
 
 export default Beranda;
