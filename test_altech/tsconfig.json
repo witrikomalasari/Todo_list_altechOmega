@@ -19,7 +19,8 @@
       "@theme/*": ["src/theme/*"],
       "@utils/*": ["src/utils/*"],
       "@API/*": ["src/API/*"],
-      "@redux/*": ["src/redux/*"]
+      "@redux/*": ["src/redux/*"],
+      "@models/*": ["src/models/*"]
     }
   }
 }

@@ -1,5 +1,6 @@
 import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import AddTaskScreen from '@screens/AddTask/AddTaskScreen';
 import Detail from '@screens/Detail/Detail';
 import Home from '@screens/Home/Home';
 import Login from '@screens/Login/Login';
@@ -9,6 +10,7 @@ export type NavigatorParamList = {
   Login: undefined;
   Home: undefined;
   Detail: undefined;
+  AddTaskScreen: undefined; // TaskInputProps;
 };
 
 const Stack = createNativeStackNavigator<NavigatorParamList>();
@@ -19,6 +21,7 @@ const AppStack = () => {
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="Detail" component={Detail} />
+      <Stack.Screen name="AddTaskScreen" component={AddTaskScreen} />
     </Fragment>
   );
 

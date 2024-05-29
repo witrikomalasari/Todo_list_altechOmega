@@ -1,13 +1,18 @@
-import {JSONListTask} from '@assets/dummyData';
 import SearchIcon from '@assets/iconSVG/searchIcon';
 import {HeaderApp, Spacer} from '@components/atoms';
 import CardTask from '@components/molecules/CardTask';
+import {useAppDispatch} from '@hooks/useAppDispatch';
+import {useAppSelector} from '@hooks/useAppSelector';
+import {Task} from '@models/InterfaceDataListTodo';
+import {deleteTask, setTasks, toggleTask} from '@redux/reducers/tasksReducer';
 import {Icon} from '@rneui/themed';
 import {AltechColors} from '@theme/colorsAltech';
-import React, {FC, useRef, useState} from 'react';
+import React, {FC, useEffect, useRef, useState} from 'react';
 import {
+  ActivityIndicator,
   FlatList,
   StyleSheet,
+  Text,
   TextInput,
   TouchableOpacity,
   View,
@@ -15,55 +20,54 @@ import {
 
 interface IBeranda {}
 
-export interface DataTask {
-  id: number;
-  taskName: string;
-  date: string;
-  category: string;
-  completed: boolean;
-}
-
 const Beranda: FC<IBeranda> = () => {
+  const dispatch = useAppDispatch();
+  // const navigation = useBaseNavigation();
+
+  const {tasks} = useAppSelector(state => state.tasks);
   const [searchInput, setSearchInput] = useState<string>('');
-  const [listTodo, setListTodo] = useState<DataTask[]>([]);
+  const [loading, _setLoading] = useState<boolean>(false);
+  const [listFilterSearch, setListFilterSearch] = useState<Task[]>(tasks);
   const textInputRef = useRef<TextInput>(null);
 
-  const handleFilter = (UserTextInput: string) => {
-    if (!UserTextInput) {
-      setListTodo(JSONListTask.data);
+  useEffect(() => {
+    dispatch(setTasks(tasks));
+  }, [dispatch, tasks]);
+
+  const handleFilterSearch = (inputTextUser: string) => {
+    const trimmedInput = inputTextUser.trim();
+
+    if (trimmedInput.length > 0) {
+      const searchResults = tasks.filter(item =>
+        item.taskName.toLowerCase().includes(trimmedInput.toLowerCase()),
+      );
+      setListFilterSearch(searchResults);
+    } else {
+      setListFilterSearch(tasks);
     }
-    let filterlist = JSONListTask.data.filter(item =>
-      item.taskName.toLowerCase().includes(UserTextInput.toLowerCase()),
-    );
-    setListTodo(filterlist);
   };
 
-  const handleClearInput = () => {
-    // setSearchInput('');
-    // if (textInputRef.current) {
-    //   textInputRef.current.clear();
-    // }
-  };
-
-  // console.log('ffff', listTodo);
-
-  // const handleDeleteByID = () => {
-  // let deleteItem = JSONListTask.data.filter(item => item.id !== id);
-  // setListTodo(prevData => prevData.filter(item => item.id !== id));
-  // };
-
-  const handleRenderItem = ({item}) => {
-    // console.log('fd', item);
+  const handleRenderItem = ({item}: {item: Task}) => {
+    console.log('itemini', item);
+    const {id, taskName, dateTodo, completed} = item;
     return (
       <CardTask
-        taskName={item.taskName}
-        category={item.category}
-        date={item.date}
-        status={item.completed}
-        // onEdit={()=>{}}
-        // onDelete={() => handleDeleteByID(item.id)}
-        // onCompleted={()=>{}}
+        taskName={taskName}
+        date={dateTodo}
+        status={completed}
+        onDelete={() => dispatch(deleteTask(id!))}
+        onCompleted={() => dispatch(toggleTask(id!))}
       />
+    );
+  };
+
+  const renderFooter = () => {
+    if (!loading) return null;
+    return (
+      <View style={styles.footer}>
+        <ActivityIndicator style={{marginVertical: 20}} />
+        <Text style={styles.footerText}>Sedang memuat...</Text>
+      </View>
     );
   };
 
@@ -81,7 +85,7 @@ const Beranda: FC<IBeranda> = () => {
                 value={searchInput}
                 onChangeText={text => {
                   setSearchInput(text);
-                  handleFilter(text);
+                  handleFilterSearch(text);
                 }}
                 placeholder="Search Task here..."
                 placeholderTextColor={AltechColors.white}
@@ -92,7 +96,10 @@ const Beranda: FC<IBeranda> = () => {
               </View>
               <TouchableOpacity
                 style={styles.wrappDeleteIcon}
-                onPress={() => handleClearInput()}>
+                onPress={() => {
+                  setSearchInput('');
+                  setListFilterSearch(tasks);
+                }}>
                 <Icon name="clear" type="material" color={AltechColors.white} />
               </TouchableOpacity>
             </View>
@@ -101,9 +108,13 @@ const Beranda: FC<IBeranda> = () => {
         <Spacer height={10} />
         <View style={styles.listContainer}>
           <FlatList
-            data={listTodo}
-            keyExtractor={item => item.id.toString()}
+            showsVerticalScrollIndicator={false}
+            data={listFilterSearch}
+            keyExtractor={item => item.id as string}
             renderItem={handleRenderItem}
+            onEndReachedThreshold={0.5}
+            ListFooterComponent={renderFooter}
+            initialNumToRender={10}
           />
         </View>
       </View>
@@ -159,6 +170,13 @@ const styles = StyleSheet.create({
   },
   wrappDeleteIcon: {position: 'absolute', right: 13},
   listContainer: {paddingHorizontal: 10},
+  footer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  footerText: {
+    color: 'black',
+  },
 });
 
 export default Beranda;

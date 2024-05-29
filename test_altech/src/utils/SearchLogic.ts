@@ -1,12 +1,15 @@
-export const filteredByNames = ({dataAPI, searchUserInput}) => {
-  //   const {taskName} = searchUserInput;
-  console.log('tas', searchUserInput);
-  console.log('dat', dataAPI);
-  //   let searchFeature = dataAPI.filter((item: string) => {
-  //     console.log('fddse', item);
-  //     item.toLowerCase().includes(searchUserInput.toLowerCase());
-  //   });
-  //   return searchFeature;
+import {Task} from '@models/InterfaceDataListTodo';
+
+export const filteredByNames = (tasks: Task[], inputTextUser: string) => {
+  // console.log('tas', tasks);
+  // console.log('dat', inputTextUser);
+  let searchFeature = tasks.filter(item => {
+    // console.log('taskname', item.taskName.toLowerCase());
+    // console.log('inputuser', inputTextUser.toLowerCase());
+    item.taskName.toLowerCase().includes(inputTextUser.toLowerCase());
+  });
+
+  return searchFeature;
 };
 
 // export const filterByStatus = () => {

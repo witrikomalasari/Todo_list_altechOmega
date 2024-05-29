@@ -5,30 +5,31 @@ import React, {FC} from 'react';
 import {Animated, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 interface ICardTaskProps {
-  taskName: string;
-  category: string;
-  date: string;
-  status?: string;
+  id?: string;
+  taskName?: string;
+  date?: string;
+  status?: boolean;
   onEdit?: () => void;
-  onDelete?: () => void;
-  onCompleted?: () => void;
+  onDelete?: (id?: string) => void;
+  onCompleted?: (id?: string) => void;
 }
 
 const CardTask: FC<ICardTaskProps> = ({
   taskName,
-  category,
   date,
+  status,
   onEdit,
   onDelete,
   onCompleted,
+  // onToggle,
 }) => {
   return (
     <Animated.View style={styles.container}>
       <View style={{flex: 1}}>
-        <Text style={styles.text}>{taskName}</Text>
+        <Text style={[styles.text, status && styles.completed]}>
+          {taskName}
+        </Text>
         <Text style={styles.text}>{date}</Text>
-        <Text style={styles.text}>{category}</Text>
-        {/* <Text style={styles.text}>{status}</Text> */}
       </View>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <TouchableOpacity onPress={() => onEdit && onEdit()}>
@@ -39,7 +40,9 @@ const CardTask: FC<ICardTaskProps> = ({
           <DeleteIcon color={AltechColors.white} />
         </TouchableOpacity>
         <Spacer width={15} />
-        <TouchableOpacity onPress={() => onCompleted && onCompleted()}>
+        <TouchableOpacity
+          disabled={status ? true : false}
+          onPress={() => onCompleted && onCompleted()}>
           <CheckIcon color={AltechColors.white} />
         </TouchableOpacity>
       </View>
@@ -51,7 +54,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    // alignItems: 'center',
     padding: 8,
     borderBottomColor: '#ccc',
     borderBottomWidth: 1,
@@ -71,11 +73,12 @@ const styles = StyleSheet.create({
   },
   text: {
     flex: 1,
+    fontSize: 18,
     color: AltechColors.white,
   },
   completed: {
     textDecorationLine: 'line-through',
-    color: 'yellow',
+    textDecorationStyle: 'double',
   },
   shadowButton: {
     shadowColor: '#000',

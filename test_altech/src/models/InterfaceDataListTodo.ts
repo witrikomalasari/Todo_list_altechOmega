@@ -1,6 +1,14 @@
-export interface IDataListTodo {
-  id: number;
-  todo: string;
+export interface Task {
+  id?: string;
+  dateTodo: string;
+  taskName: string;
   completed: boolean;
-  userId: number;
 }
+
+export interface TasksState {
+  tasks: Task[];
+}
+
+export const initialState: TasksState = {
+  tasks: [],
+};

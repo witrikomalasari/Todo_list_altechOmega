@@ -1,8 +1,8 @@
-import React, {FC, useState} from 'react';
-import {Dimensions, StyleSheet, TextInput, View, ViewStyle} from 'react-native';
-import Spacer from './Spacer';
-import {AltechColors} from '@theme/colorsAltech';
 import {AltechText} from '@components/molecules';
+import {AltechColors} from '@theme/colorsAltech';
+import React, {FC, useState} from 'react';
+import {StyleSheet, TextInput, View, ViewStyle} from 'react-native';
+import Spacer from './Spacer';
 
 interface IInputFieldProps {
   value?: string;
@@ -14,8 +14,6 @@ interface IInputFieldProps {
   placeHolderTextColor?: string;
   isLabel?: boolean;
 }
-
-const {width} = Dimensions.get('window');
 
 export const InputFieldAltech: FC<IInputFieldProps> = ({
   value,
@@ -38,7 +36,13 @@ export const InputFieldAltech: FC<IInputFieldProps> = ({
     <View style={styles.container}>
       {isLabel && (
         <>
-          <AltechText>{title}</AltechText>
+          <AltechText
+            fontSize={16}
+            fontWeight="bold"
+            textType="header"
+            fontColors={AltechColors.text.subTitle}>
+            {title}
+          </AltechText>
           <Spacer height={8} />
         </>
       )}
@@ -64,11 +68,10 @@ export const InputFieldAltech: FC<IInputFieldProps> = ({
 };
 
 const styles = StyleSheet.create({
-  container: {width},
+  container: {},
   textContainer: {
     borderWidth: 1,
     borderRadius: 8,
-    paddingHorizontal: 16,
     marginTop: 0,
     color: AltechColors.text.black,
   },

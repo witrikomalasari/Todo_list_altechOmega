@@ -6,7 +6,7 @@ import React, {FC} from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 
 interface IHeaderAppProps {
-  headerName: string;
+  headerName?: string;
 }
 
 export const HeaderApp: FC<IHeaderAppProps> = ({headerName}) => {

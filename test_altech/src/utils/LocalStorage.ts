@@ -1,9 +1,9 @@
+import {Task} from '@models/InterfaceDataListTodo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {IDataListTodo} from 'src/models/InterfaceDataListTodo';
 
 export const setDataAsyncstorage = async (
   key: string,
-  value: IDataListTodo,
+  value: Task[],
 ): Promise<boolean> => {
   try {
     await AsyncStorage.setItem(key, JSON.stringify(value));
@@ -21,9 +21,11 @@ export const getDataAsyncstorage = async (key: string) => {
     if (value !== null) {
       return JSON.parse(value);
     }
+    [];
   } catch (e) {
     // error reading value
     console.log('gagal get data asyncstorage', e);
+    return [];
   }
 };
 

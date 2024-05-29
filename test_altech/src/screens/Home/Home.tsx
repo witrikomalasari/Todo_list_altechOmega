@@ -1,3 +1,5 @@
+import {HeaderApp} from '@components/atoms';
+import {useBaseNavigation} from '@hooks/useBaseNavigation';
 import {
   BottomTabBarButtonProps,
   createBottomTabNavigator,
@@ -7,70 +9,35 @@ import Beranda from '@screens/Beranda/Beranda';
 import Completed from '@screens/Completed/Completed';
 import {AltechColors} from '@theme/colorsAltech';
 import React, {FC} from 'react';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {SafeAreaView, StyleSheet, TouchableOpacity} from 'react-native';
+import {tabBarIconBottomTab, TabBarIconProps} from './TabBarIconBottomTab';
 
 const Tab = createBottomTabNavigator();
 
 interface IHomeProps {}
 
-// const DummyPage = () => {
-//   return (
-//     <KeyboardAvoid>
-//       <HeaderApp HeaderName="HeaderAPP" />
-//     </KeyboardAvoid>
-//   );
-// };
-
-interface TabBarIconProps {
-  focused: boolean;
-  color?: string;
-  size?: number;
-}
-
-interface Route {
-  name: string;
-}
-
 const Home: FC<IHomeProps> = () => {
-  const tabBarIconBottomTab = ({focused}: TabBarIconProps, route: Route) => {
-    let iconName!: any;
-    let iconType: string = 'feather' || 'material';
-    let iconSize: number = 0;
-    let iconColor: string = focused ? AltechColors.primary : AltechColors.gray;
+  const navigation = useBaseNavigation();
 
-    switch (route.name) {
-      case 'All List':
-        iconName = 'list';
-        iconSize = 20;
-        break;
-      case 'Completed':
-        iconName = 'check-square';
-        iconSize = 20;
-        break;
-    }
+  const tabBarButtonFab = (props: BottomTabBarButtonProps) => {
+    const isButtonFabSelected = props.accessibilityState?.selected;
 
     return (
-      <View
-        style={{
-          alignItems: 'center',
-          paddingVertical: 5,
-          // flexGrow: 1,
-        }}>
-        <Icon
-          type={iconType}
-          name={iconName}
-          color={iconColor}
-          size={iconSize}
-        />
-      </View>
+      <>
+        <TouchableOpacity
+          {...props}
+          style={styles.floatingButton}
+          onPress={() => navigation.navigate('AddTaskScreen')}>
+          <Icon
+            name={isButtonFabSelected ? 'check' : 'add'}
+            type="material"
+            color="white"
+            size={30}
+          />
+        </TouchableOpacity>
+      </>
     );
   };
-
-  const tabBarButtonFab = (props: BottomTabBarButtonProps) => (
-    <TouchableOpacity {...props} style={styles.floatingButton}>
-      <Icon name="add" type="material" color="white" size={30} />
-    </TouchableOpacity>
-  );
 
   return (
     <Tab.Navigator
@@ -99,7 +66,7 @@ const Home: FC<IHomeProps> = () => {
       <Tab.Screen name="All List" component={Beranda} />
       <Tab.Screen
         name="Add"
-        component={Beranda} // Replace with the screen for your floating button action
+        component={DummyPage}
         options={{
           tabBarButton: (props: BottomTabBarButtonProps) =>
             tabBarButtonFab(props),
@@ -107,6 +74,13 @@ const Home: FC<IHomeProps> = () => {
       />
       <Tab.Screen name="Completed" component={Completed} />
     </Tab.Navigator>
+  );
+};
+const DummyPage = () => {
+  return (
+    <SafeAreaView>
+      <HeaderApp />
+    </SafeAreaView>
   );
 };
 
