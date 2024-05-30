@@ -1,7 +1,7 @@
 import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import AddTaskScreen from '@screens/AddTask/AddTaskScreen';
-import Detail from '@screens/Detail/Detail';
+import EditTaskScreen from '@screens/EditTask/EditTaskScreen';
 import Home from '@screens/Home/Home';
 import Login from '@screens/Login/Login';
 import React, {ComponentProps, Fragment} from 'react';
@@ -11,6 +11,7 @@ export type NavigatorParamList = {
   Home: undefined;
   Detail: undefined;
   AddTaskScreen: undefined; // TaskInputProps;
+  EditTaskScreen: undefined;
 };
 
 const Stack = createNativeStackNavigator<NavigatorParamList>();
@@ -20,8 +21,8 @@ const AppStack = () => {
     <Fragment>
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen name="Detail" component={Detail} />
       <Stack.Screen name="AddTaskScreen" component={AddTaskScreen} />
+      <Stack.Screen name="EditTaskScreen" component={EditTaskScreen} />
     </Fragment>
   );
 

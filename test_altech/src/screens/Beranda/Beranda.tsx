@@ -3,13 +3,18 @@ import {HeaderApp, Spacer} from '@components/atoms';
 import CardTask from '@components/molecules/CardTask';
 import {useAppDispatch} from '@hooks/useAppDispatch';
 import {useAppSelector} from '@hooks/useAppSelector';
+import {useBaseNavigation} from '@hooks/useBaseNavigation';
 import {Task} from '@models/InterfaceDataListTodo';
-import {deleteTask, setTasks, toggleTask} from '@redux/reducers/tasksReducer';
+import {deleteTask, toggleTask} from '@redux/reducers/tasksReducer';
+import {CheckBox} from '@rneui/base';
 import {Icon} from '@rneui/themed';
 import {AltechColors} from '@theme/colorsAltech';
+import {getDataAsyncstorage, removeData} from '@utils/LocalStorage';
+import {filteredByNames} from '@utils/SearchLogic';
 import React, {FC, useEffect, useRef, useState} from 'react';
 import {
   ActivityIndicator,
+  Dimensions,
   FlatList,
   StyleSheet,
   Text,
@@ -20,42 +25,67 @@ import {
 
 interface IBeranda {}
 
+const {height} = Dimensions.get('window');
+
 const Beranda: FC<IBeranda> = () => {
   const dispatch = useAppDispatch();
-  // const navigation = useBaseNavigation();
+  const navigation = useBaseNavigation();
 
   const {tasks} = useAppSelector(state => state.tasks);
   const [searchInput, setSearchInput] = useState<string>('');
   const [loading, _setLoading] = useState<boolean>(false);
   const [listFilterSearch, setListFilterSearch] = useState<Task[]>(tasks);
+  const [unCompleted, setUnCompleted] = useState(false);
+  const [unfinishedList, setUnfinishedList] = useState<Task[]>(tasks);
   const textInputRef = useRef<TextInput>(null);
 
   useEffect(() => {
-    dispatch(setTasks(tasks));
-  }, [dispatch, tasks]);
+    setListFilterSearch(tasks);
+    setUnfinishedList(tasks);
+  }, [tasks]);
+
+  useEffect(() => {
+    const coba = async () => {
+      let liat = await getDataAsyncstorage('taskTask');
+      console.log('liat isi asyn', liat);
+    };
+
+    coba();
+  }, [tasks]);
 
   const handleFilterSearch = (inputTextUser: string) => {
-    const trimmedInput = inputTextUser.trim();
+    let resultFilterByName = filteredByNames(tasks, inputTextUser, unCompleted);
 
-    if (trimmedInput.length > 0) {
-      const searchResults = tasks.filter(item =>
-        item.taskName.toLowerCase().includes(trimmedInput.toLowerCase()),
-      );
-      setListFilterSearch(searchResults);
-    } else {
-      setListFilterSearch(tasks);
+    setListFilterSearch(resultFilterByName);
+  };
+
+  const handleFilterUnfinished = (unFinished: boolean) => {
+    console.log('unf', unFinished);
+    const task = tasks.filter(item => item.completed === unFinished);
+    if (task) {
+      console.log('task', task);
+      setUnfinishedList(task);
+    }
+    if (!task) {
+      setUnfinishedList(tasks);
     }
   };
 
   const handleRenderItem = ({item}: {item: Task}) => {
-    console.log('itemini', item);
+    // console.log('itemini', item);
     const {id, taskName, dateTodo, completed} = item;
     return (
       <CardTask
         taskName={taskName}
         date={dateTodo}
         status={completed}
-        onDelete={() => dispatch(deleteTask(id!))}
+        onEdit={() => {
+          navigation.navigate('EditTaskScreen');
+        }}
+        onDelete={async () => {
+          await removeData('taskTask');
+          dispatch(deleteTask(id!));
+        }}
         onCompleted={() => dispatch(toggleTask(id!))}
       />
     );
@@ -65,11 +95,14 @@ const Beranda: FC<IBeranda> = () => {
     if (!loading) return null;
     return (
       <View style={styles.footer}>
+        {/* <Spacer height={60} /> */}
         <ActivityIndicator style={{marginVertical: 20}} />
         <Text style={styles.footerText}>Sedang memuat...</Text>
       </View>
     );
   };
+
+  console.log('tasks', tasks);
 
   return (
     <View style={styles.container}>
@@ -104,12 +137,26 @@ const Beranda: FC<IBeranda> = () => {
               </TouchableOpacity>
             </View>
           </View>
+          <View style={{position: 'absolute', top: 70, left: 10}}>
+            <CheckBox
+              title="Task unFinished!"
+              checked={unCompleted}
+              onPress={() => {
+                setUnCompleted(!unCompleted);
+                handleFilterUnfinished(unCompleted);
+              }}
+              checkedColor={AltechColors.primary}
+              uncheckedColor={AltechColors.secondary}
+              size={15}
+            />
+          </View>
         </View>
         <Spacer height={10} />
         <View style={styles.listContainer}>
           <FlatList
+            scrollEnabled={true}
             showsVerticalScrollIndicator={false}
-            data={listFilterSearch}
+            data={unfinishedList || listFilterSearch}
             keyExtractor={item => item.id as string}
             renderItem={handleRenderItem}
             onEndReachedThreshold={0.5}
@@ -125,10 +172,12 @@ const Beranda: FC<IBeranda> = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    height,
     backgroundColor: AltechColors.secondary,
   },
   wrapper: {
     flex: 1,
+    paddingBottom: 140,
     backgroundColor: AltechColors.white,
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
@@ -136,7 +185,7 @@ const styles = StyleSheet.create({
   section: {
     backgroundColor: AltechColors.primary,
     width: '100%',
-    height: 100,
+    height: 120,
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
     paddingHorizontal: 16,

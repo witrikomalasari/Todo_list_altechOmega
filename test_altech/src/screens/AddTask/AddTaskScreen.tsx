@@ -11,6 +11,7 @@ import {addTask} from '@redux/reducers/tasksReducer';
 import {CheckBox} from '@rneui/themed';
 import {AltechColors} from '@theme/colorsAltech';
 import {formatDate} from '@utils/Date';
+import {addTaskToAsyncStorage} from '@utils/LocalStorage';
 import React, {FC, useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import DatePicker from 'react-native-date-picker';
@@ -35,15 +36,13 @@ const AddTaskScreen: FC<IAddTaskScreen> = () => {
 
   const handleAddTask = async () => {
     try {
-      // let num = 1;
       let dataTaskInput: Task = {dateTodo, taskName, completed};
       dispatch(addTask(dataTaskInput));
-      // let dataTodoForAsyncStorage = [
-      //   {
-      //     ...dataTaskInput,
-      //     id: String(num++),
-      //   },
-      // ];
+      let dataTodoForAsyncStorage = {
+        ...dataTaskInput,
+        id: new Date().toISOString(),
+      };
+      await addTaskToAsyncStorage('taskTask', dataTodoForAsyncStorage);
       navigation.navigate('Home');
     } catch (error) {
       console.log('error', error);

@@ -1,16 +1,34 @@
 import {Task} from '@models/InterfaceDataListTodo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// Function to add a single Task to the array in AsyncStorage
+export const addTaskToAsyncStorage = async (
+  key: string,
+  newTask: Task,
+): Promise<Task[]> => {
+  try {
+    const existingData = await AsyncStorage.getItem(key);
+    let taskArray: Task[] = existingData ? JSON.parse(existingData) : [];
+    console.log('taskar', taskArray);
+    taskArray.push(newTask);
+    await AsyncStorage.setItem(key, JSON.stringify(taskArray));
+    return taskArray;
+  } catch (e) {
+    console.error('Failed to save data', e);
+    throw e;
+  }
+};
+
 export const setDataAsyncstorage = async (
   key: string,
   value: Task[],
-): Promise<boolean> => {
+): Promise<Task[]> => {
   try {
     await AsyncStorage.setItem(key, JSON.stringify(value));
-    return true;
+    return value;
   } catch (e) {
-    // console.log('gagal simpan data', e);
-    return false;
+    console.error('Failed to save data', e);
+    throw e;
   }
 };
 
@@ -31,8 +49,27 @@ export const getDataAsyncstorage = async (key: string) => {
 
 export async function removeData(key: string): Promise<void> {
   try {
-    await AsyncStorage.removeItem(key);
+    let coba = await AsyncStorage.removeItem(key);
+    console.log('cobaremove', coba);
   } catch (error) {
     console.error('Error removing data:', error);
   }
 }
+
+export const removeTaskFromAsyncStorage = async (
+  key: string,
+  taskId: string,
+): Promise<Task[]> => {
+  try {
+    const existingData = await AsyncStorage.getItem(key);
+    let taskArray: Task[] = existingData ? JSON.parse(existingData) : [];
+
+    taskArray = taskArray.filter(task => task.id !== taskId);
+    await AsyncStorage.setItem(key, JSON.stringify(taskArray));
+
+    return taskArray;
+  } catch (e) {
+    console.error('Failed to remove data', e);
+    throw e;
+  }
+};

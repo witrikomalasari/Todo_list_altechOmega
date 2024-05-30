@@ -1,5 +1,6 @@
 import {ArrowLeft} from '@assets/iconSVG';
 import {AltechText} from '@components/molecules';
+import {useBaseNavigation} from '@hooks/useBaseNavigation';
 import {AltechColors} from '@theme/colorsAltech';
 import {type} from '@theme/fontAltech';
 import React, {FC} from 'react';
@@ -10,11 +11,14 @@ interface IHeaderAppProps {
 }
 
 export const HeaderApp: FC<IHeaderAppProps> = ({headerName}) => {
+  const navigation = useBaseNavigation();
   return (
     <View style={styles.container}>
       <TouchableOpacity
-      // onPress={() => {navigation.popToTop();}}
-      // style={{backgroundColor: 'red'}}
+        onPress={() => {
+          navigation.popToTop();
+        }}
+        // style={{backgroundColor: 'red'}}
       >
         <ArrowLeft color={AltechColors.text.black} />
       </TouchableOpacity>

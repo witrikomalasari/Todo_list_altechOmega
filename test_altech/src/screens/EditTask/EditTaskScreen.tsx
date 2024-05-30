@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 
-const EditTask = () => {
+const EditTaskScreen = () => {
   //  const [text, setText] = useState(initialText);
   //  const dispatch = useDispatch();
 
@@ -34,4 +34,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EditTask;
+export default EditTaskScreen;
